@@ -1,28 +1,30 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import matplotlib.pyplot as plt
+import numpy as np
 
 from sklearn.metrics import classification_report, confusion_matrix
-import matplotlib.pyplot as plt
 
-st.title("Cardiovascular Disease Prediction")
+st.set_page_config(page_title="Cardio Prediction App", layout="centered")
 
+st.title("Cardiovascular Disease Prediction App")
+
+# Model selection
 model_name = st.selectbox(
-
-"Select Model",
-
-[
-"Logistic Regression",
-"Decision Tree",
-"KNN",
-"Naive Bayes",
-"Random Forest",
-"XGBoost"
-]
-
+    "Select Model",
+    [
+        "Logistic Regression",
+        "Decision Tree",
+        "KNN",
+        "Naive Bayes",
+        "Random Forest",
+        "XGBoost"
+    ]
 )
 
-uploaded_file = st.file_uploader("Upload CSV", type="csv")
+# File upload
+uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
 
 if uploaded_file:
 
@@ -31,20 +33,66 @@ if uploaded_file:
     if "id" in df.columns:
         df.drop("id", axis=1, inplace=True)
 
-    model = joblib.load(f"model/{model_name.replace(' ','_')}.pkl")
+    model = joblib.load(f"model/{model_name.replace(' ','_')}_model.pkl")
 
-    X = df.drop("cardio", axis=1)
-    y = df["cardio"]
+    if "cardio" in df.columns:
 
-    y_pred = model.predict(X)
+        X = df.drop("cardio", axis=1)
+        y = df["cardio"]
 
-    st.text("Classification Report")
-    st.text(classification_report(y,y_pred))
+        y_pred = model.predict(X)
 
-    cm = confusion_matrix(y,y_pred)
+        # Classification Report
+        st.subheader("Classification Report")
+        st.text(classification_report(y, y_pred))
 
-    fig, ax = plt.subplots()
-    ax.imshow(cm)
-    ax.set_title("Confusion Matrix")
+       # Confusion Matrix
+st.subheader("Confusion Matrix")
 
-    st.pyplot(fig)
+cm = confusion_matrix(y, y_pred)
+
+fig, ax = plt.subplots()
+
+# Set white background
+fig.patch.set_facecolor("white")
+ax.set_facecolor("white")
+
+# Draw empty grid (no colors)
+ax.imshow(np.zeros_like(cm), vmin=0, vmax=1)
+
+# Add large bold black numbers
+for i in range(cm.shape[0]):
+    for j in range(cm.shape[1]):
+        ax.text(
+            j,
+            i,
+            str(cm[i, j]),
+            ha="center",
+            va="center",
+            fontsize=28,          # bigger size
+            fontweight="bold",
+            color="black"
+        )
+
+# Labels
+ax.set_xlabel("Predicted Label", fontsize=14, fontweight="bold")
+ax.set_ylabel("True Label", fontsize=14, fontweight="bold")
+
+ax.set_xticks([0, 1])
+ax.set_yticks([0, 1])
+
+ax.set_xticklabels(["No Disease", "Disease"], fontsize=12)
+ax.set_yticklabels(["No Disease", "Disease"], fontsize=12)
+
+# Add border grid lines
+ax.set_xticks(np.arange(-.5, 2, 1), minor=True)
+ax.set_yticks(np.arange(-.5, 2, 1), minor=True)
+ax.grid(which="minor", color="black", linestyle='-', linewidth=2)
+
+ax.tick_params(which="minor", bottom=False, left=False)
+
+ax.set_title("Confusion Matrix", fontsize=16, fontweight="bold")
+
+plt.tight_layout()
+
+st.pyplot(fig)
