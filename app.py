@@ -3,7 +3,6 @@ import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
 import numpy as np
-
 from sklearn.metrics import classification_report, confusion_matrix
 
 st.set_page_config(page_title="Cardio Prediction App", layout="centered")
@@ -46,53 +45,45 @@ if uploaded_file:
         st.subheader("Classification Report")
         st.text(classification_report(y, y_pred))
 
-       # Confusion Matrix
-st.subheader("Confusion Matrix")
+        # Confusion Matrix
+        st.subheader("Confusion Matrix")
 
-cm = confusion_matrix(y, y_pred)
+        cm = confusion_matrix(y, y_pred)
 
-fig, ax = plt.subplots()
+        fig, ax = plt.subplots()
+        fig.patch.set_facecolor("white")
+        ax.set_facecolor("white")
 
-# Set white background
-fig.patch.set_facecolor("white")
-ax.set_facecolor("white")
+        ax.imshow(np.zeros_like(cm), vmin=0, vmax=1)
 
-# Draw empty grid (no colors)
-ax.imshow(np.zeros_like(cm), vmin=0, vmax=1)
+        for i in range(cm.shape[0]):
+            for j in range(cm.shape[1]):
+                ax.text(
+                    j,
+                    i,
+                    str(cm[i, j]),
+                    ha="center",
+                    va="center",
+                    fontsize=28,
+                    fontweight="bold",
+                    color="black"
+                )
 
-# Add large bold black numbers
-for i in range(cm.shape[0]):
-    for j in range(cm.shape[1]):
-        ax.text(
-            j,
-            i,
-            str(cm[i, j]),
-            ha="center",
-            va="center",
-            fontsize=28,          # bigger size
-            fontweight="bold",
-            color="black"
-        )
+        ax.set_xlabel("Predicted Label", fontsize=14, fontweight="bold")
+        ax.set_ylabel("True Label", fontsize=14, fontweight="bold")
 
-# Labels
-ax.set_xlabel("Predicted Label", fontsize=14, fontweight="bold")
-ax.set_ylabel("True Label", fontsize=14, fontweight="bold")
+        ax.set_xticks([0, 1])
+        ax.set_yticks([0, 1])
+        ax.set_xticklabels(["No Disease", "Disease"])
+        ax.set_yticklabels(["No Disease", "Disease"])
 
-ax.set_xticks([0, 1])
-ax.set_yticks([0, 1])
+        ax.set_xticks(np.arange(-.5, 2, 1), minor=True)
+        ax.set_yticks(np.arange(-.5, 2, 1), minor=True)
+        ax.grid(which="minor", color="black", linestyle='-', linewidth=2)
+        ax.tick_params(which="minor", bottom=False, left=False)
 
-ax.set_xticklabels(["No Disease", "Disease"], fontsize=12)
-ax.set_yticklabels(["No Disease", "Disease"], fontsize=12)
+        plt.tight_layout()
+        st.pyplot(fig)
 
-# Add border grid lines
-ax.set_xticks(np.arange(-.5, 2, 1), minor=True)
-ax.set_yticks(np.arange(-.5, 2, 1), minor=True)
-ax.grid(which="minor", color="black", linestyle='-', linewidth=2)
-
-ax.tick_params(which="minor", bottom=False, left=False)
-
-ax.set_title("Confusion Matrix", fontsize=16, fontweight="bold")
-
-plt.tight_layout()
-
-st.pyplot(fig)
+    else:
+        st.write("Uploaded file does not contain 'cardio' column.")
