@@ -1,16 +1,3 @@
-
-import sys
-import subprocess
-
-# This will print to the Streamlit Cloud logs
-print("--- DEBUGGING INSTALLED PACKAGES ---")
-try:
-    installed_packages = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze']).decode('utf-8')
-    print(installed_packages)
-except Exception as e:
-    print(f"Could not list packages: {e}")
-print("-------------------------------------")
-
 import streamlit as st
 import pandas as pd
 import joblib
