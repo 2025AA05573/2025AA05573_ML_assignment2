@@ -22,6 +22,17 @@ model_name = st.selectbox(
     ]
 )
 
+model_files = {
+    "Logistic Regression": "logistic_regression_model.pkl",
+    "Decision Tree": "decision_tree_model.pkl",
+    "KNN": "k-nearest_neighbors_model.pkl",
+    "Naive Bayes": "naive_bayes_model.pkl",
+    "Random Forest": "random_forest_model.pkl",
+    "XGBoost": "xgboost_model.pkl"
+}
+
+
+
 # File upload
 uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
 
@@ -32,7 +43,7 @@ if uploaded_file:
     if "id" in df.columns:
         df.drop("id", axis=1, inplace=True)
 
-    model = joblib.load(f"model/{model_name.replace(' ','_')}_model.pkl")
+    model = joblib.load(f"model/{model_files[model_name]}")
 
     if "cardio" in df.columns:
 
