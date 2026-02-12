@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix
 
-st.set_page_config(page_title="Cardio Prediction App", layout="centered")
+st.set_page_config(page_title="Cardio Classification App", layout="centered")
 
-st.title("Cardiovascular Disease Prediction App")
+st.title("Cardiovascular Disease Classification Model App")
 
 # Model selection
 model_name = st.selectbox(
