@@ -1,4 +1,4 @@
-# Cardiovascular Disease Prediction using Machine Learning
+# Cardiovascular Disease Classification using Machine Learning
 
 ---
 
@@ -111,9 +111,11 @@ This project successfully demonstrates end-to-end machine learning workflow incl
 
 ---
 
-# GitHub Repository
+# GitHub / Streamkit app Repository
 
 [https://github.com/2025AA05573/2025AA05573_ML_assignment2](https://github.com/2025AA05573/2025AA05573_ML_assignment2)
+
+https://2025aa05573mlassignment2-daebzuqmkqlxrhjtrh8koj.streamlit.app/
 
 ---
 
